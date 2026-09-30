@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         if (::listLayout.isInitialized) {
-            displayMarks()
+            displayBaristas()
         }
     }
 
@@ -34,13 +34,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         val title = TextView(this).apply {
-            text = "Placed Marks"
+            text = "Placed Baristas"
             textSize = 28f
             gravity = Gravity.CENTER
         }
 
         val addButton = Button(this).apply {
-            text = "Add Mark"
+            text = "Add Barista"
             setOnClickListener {
                 val intent = Intent(this@MainActivity, AddEditActivity::class.java)
                 startActivity(intent)
@@ -77,19 +77,19 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(root)
 
-        displayMarks()
+        displayBaristas()
     }
 
-    private fun displayMarks() {
+    private fun displayBaristas() {
 
         listLayout.removeAllViews()
 
-        val marks = AppData.baristaStore.findAll()
+        val baristas = AppData.baristaStore.findAll()
 
-        if (marks.isEmpty()) {
+        if (baristas.isEmpty()) {
 
             val emptyText = TextView(this).apply {
-                text = "No saved Cafes yet."
+                text = "No saved Baristas yet."
                 textSize = 18f
                 setPadding(0, 40, 0, 40)
             }
@@ -99,25 +99,25 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        for (mark in marks) {
+        for (barista in baristas) {
 
-            val markLayout = LinearLayout(this).apply {
+            val baristaLayout = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(0, 20, 0, 20)
             }
 
-            val markTitle = TextView(this).apply {
-                text = "${mark.id}: ${mark.name}"
+            val baristaTitle = TextView(this).apply {
+                text = "${barista.id}: ${barista.name}"
                 textSize = 20f
             }
 
-            val markAddress = TextView(this).apply {
-                text = mark.address
+            val baristaAddress = TextView(this).apply {
+                text = barista.address
                 textSize = 16f
             }
 
             val coordinates = TextView(this).apply {
-                text = "X: ${mark.x}, Y: ${mark.y}"
+                text = "X: ${barista.x}, Y: ${barista.y}"
                 textSize = 14f
             }
 
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                         AddEditActivity::class.java
                     )
 
-                    intent.putExtra("id", mark.id)
+                    intent.putExtra("id", barista.id)
 
                     startActivity(intent)
                 }
@@ -140,18 +140,18 @@ class MainActivity : AppCompatActivity() {
                 text = "Delete"
 
                 setOnClickListener {
-                    AppData.baristaStore.delete(mark.id)
-                    displayMarks()
+                    AppData.baristaStore.delete(barista.id)
+                    displayBaristas()
                 }
             }
 
-            markLayout.addView(markTitle)
-            markLayout.addView(markAddress)
-            markLayout.addView(coordinates)
-            markLayout.addView(editButton)
-            markLayout.addView(deleteButton)
+            baristaLayout.addView(baristaTitle)
+            baristaLayout.addView(baristaAddress)
+            baristaLayout.addView(coordinates)
+            baristaLayout.addView(editButton)
+            baristaLayout.addView(deleteButton)
 
-            listLayout.addView(markLayout)
+            listLayout.addView(baristaLayout)
         }
     }
 }

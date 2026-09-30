@@ -25,7 +25,7 @@ class AddEditActivity : AppCompatActivity() {
         editingId = intent.getLongExtra("id", -1L)
 
         if (editingId != -1L) {
-            loadExistingMark(editingId!!)
+            loadExistingBarista(editingId!!)
         }
     }
 
@@ -62,7 +62,7 @@ class AddEditActivity : AppCompatActivity() {
             text = "Save"
 
             setOnClickListener {
-                saveMark()
+                saveBarista()
             }
         }
 
@@ -84,14 +84,14 @@ class AddEditActivity : AppCompatActivity() {
         setContentView(root)
     }
 
-    private fun loadExistingMark(id: Long) {
+    private fun loadExistingBarista(id: Long) {
 
-        val mark = AppData.baristaStore.findOne(id)
+        val barista = AppData.baristaStore.findOne(id)
 
-        if (mark == null) {
+        if (barista == null) {
             Toast.makeText(
                 this,
-                "Mark not found",
+                "Barista not found",
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -99,13 +99,13 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
-        nameInput.setText(mark.name)
-        addressInput.setText(mark.address)
-        xInput.setText(mark.x.toString())
-        yInput.setText(mark.y.toString())
+        nameInput.setText(barista.name)
+        addressInput.setText(barista.address)
+        xInput.setText(barista.x.toString())
+        yInput.setText(barista.y.toString())
     }
 
-    private fun saveMark() {
+    private fun saveBarista() {
 
         val name = nameInput.text.toString().trim()
         val address = addressInput.text.toString().trim()
@@ -131,24 +131,24 @@ class AddEditActivity : AppCompatActivity() {
 
         if (editingId == null || editingId == -1L) {
 
-            val mark = BaristaModel(
+            val barista = BaristaModel(
                 name = name,
                 address = address,
                 x = x,
                 y = y
             )
 
-            AppData.baristaStore.create(mark)
+            AppData.baristaStore.create(barista)
 
             Toast.makeText(
                 this,
-                "Mark created",
+                "Barista created",
                 Toast.LENGTH_SHORT
             ).show()
 
         } else {
 
-            val mark = BaristaModel(
+            val barista = BaristaModel(
                 id = editingId!!,
                 name = name,
                 address = address,
@@ -156,11 +156,11 @@ class AddEditActivity : AppCompatActivity() {
                 y = y
             )
 
-            AppData.baristaStore.update(mark)
+            AppData.baristaStore.update(barista)
 
             Toast.makeText(
                 this,
-                "Mark updated",
+                "Barista updated",
                 Toast.LENGTH_SHORT
             ).show()
         }
