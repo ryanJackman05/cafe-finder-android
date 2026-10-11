@@ -1,0 +1,9 @@
+## Highlight
+#E5D8BD
+## Dark
+#282119
+
+## Tones
+#C97338
+#A54D27
+#65371F

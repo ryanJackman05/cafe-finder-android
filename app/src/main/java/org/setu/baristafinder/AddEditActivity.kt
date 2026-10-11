@@ -3,7 +3,7 @@ package org.setu.baristafinder
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.setu.baristafinder.models.BaristaModel
@@ -20,78 +20,57 @@ class AddEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        createUserInterface()
+        setContentView(R.layout.activity_add_edit)
 
-        editingId = intent.getLongExtra("id", -1L)
+        nameInput =
+            findViewById(R.id.nameInput)
 
-        if (editingId != -1L) {
-            loadExistingBarista(editingId!!)
+        addressInput =
+            findViewById(R.id.addressInput)
+
+        xInput =
+            findViewById(R.id.xInput)
+
+        yInput =
+            findViewById(R.id.yInput)
+
+        val saveButton =
+            findViewById<Button>(R.id.saveButton)
+
+        val cancelButton =
+            findViewById<Button>(R.id.cancelButton)
+
+        editingId =
+            intent.getLongExtra("id", -1L)
+                .takeIf { it != -1L }
+
+        if (editingId != null) {
+
+            findViewById<TextView>(R.id.formTitle)
+                .text = "Edit Mark"
+
+            loadExistingMark(editingId!!)
+        }
+
+        saveButton.setOnClickListener {
+            saveMark()
+        }
+
+        cancelButton.setOnClickListener {
+            finish()
         }
     }
 
-    private fun createUserInterface() {
+    private fun loadExistingMark(id: Long) {
 
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
-        }
+        val mark =
+            AppData.baristaStore.findOne(id)
 
-        nameInput = EditText(this).apply {
-            hint = "Name"
-        }
+        if (mark == null) {
 
-        addressInput = EditText(this).apply {
-            hint = "Address"
-        }
-
-        xInput = EditText(this).apply {
-            hint = "X coordinate"
-            inputType =
-                android.text.InputType.TYPE_CLASS_NUMBER or
-                        android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-        }
-
-        yInput = EditText(this).apply {
-            hint = "Y coordinate"
-            inputType =
-                android.text.InputType.TYPE_CLASS_NUMBER or
-                        android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-        }
-
-        val saveButton = Button(this).apply {
-            text = "Save"
-
-            setOnClickListener {
-                saveBarista()
-            }
-        }
-
-        val cancelButton = Button(this).apply {
-            text = "Cancel"
-
-            setOnClickListener {
-                finish()
-            }
-        }
-
-        root.addView(nameInput)
-        root.addView(addressInput)
-        root.addView(xInput)
-        root.addView(yInput)
-        root.addView(saveButton)
-        root.addView(cancelButton)
-
-        setContentView(root)
-    }
-
-    private fun loadExistingBarista(id: Long) {
-
-        val barista = AppData.baristaStore.findOne(id)
-
-        if (barista == null) {
             Toast.makeText(
                 this,
-                "Barista not found",
+                "Mark not found",
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -99,56 +78,61 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
-        nameInput.setText(barista.name)
-        addressInput.setText(barista.address)
-        xInput.setText(barista.x.toString())
-        yInput.setText(barista.y.toString())
+        nameInput.setText(mark.name)
+        addressInput.setText(mark.address)
+        xInput.setText(mark.x.toString())
+        yInput.setText(mark.y.toString())
     }
 
-    private fun saveBarista() {
+    private fun saveMark() {
 
-        val name = nameInput.text.toString().trim()
-        val address = addressInput.text.toString().trim()
+        val name =
+            nameInput.text.toString().trim()
 
-        if (name.isEmpty()) {
-            nameInput.error = "Name is required"
+        val address =
+            addressInput.text.toString().trim()
+
+        if (title.isEmpty()) {
+            nameInput.error = "Title is required"
             return
         }
 
-        val x = xInput.text.toString().toDoubleOrNull()
+        val x =
+            xInput.text.toString().toDoubleOrNull()
 
         if (x == null) {
             xInput.error = "Enter a valid number"
             return
         }
 
-        val y = yInput.text.toString().toDoubleOrNull()
+        val y =
+            yInput.text.toString().toDoubleOrNull()
 
         if (y == null) {
             yInput.error = "Enter a valid number"
             return
         }
 
-        if (editingId == null || editingId == -1L) {
+        if (editingId == null) {
 
-            val barista = BaristaModel(
+            val mark = BaristaModel(
                 name = name,
                 address = address,
                 x = x,
                 y = y
             )
 
-            AppData.baristaStore.create(barista)
+            AppData.baristaStore.create(mark)
 
             Toast.makeText(
                 this,
-                "Barista created",
+                "Mark created",
                 Toast.LENGTH_SHORT
             ).show()
 
         } else {
 
-            val barista = BaristaModel(
+            val mark = BaristaModel(
                 id = editingId!!,
                 name = name,
                 address = address,
@@ -156,11 +140,11 @@ class AddEditActivity : AppCompatActivity() {
                 y = y
             )
 
-            AppData.baristaStore.update(barista)
+            AppData.baristaStore.update(mark)
 
             Toast.makeText(
                 this,
-                "Barista updated",
+                "Mark updated",
                 Toast.LENGTH_SHORT
             ).show()
         }
