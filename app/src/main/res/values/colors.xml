@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="p_highlight">#E5D8BD</color>
+    <color name="p_dark">#282119</color>
+    <color name="p_tone_1">#C97338</color>
+    <color name="p_tone_2">#A54D27</color>
+    <color name="p_tone_3">#65371F</color>
+
 </resources>
