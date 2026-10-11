@@ -21,10 +21,10 @@ class MainActivity : AppCompatActivity() {
         } // applies insets to the main view by the system's bottom and top navigation
 
         val viewMarksButton =
-            findViewById<Button>(R.id.viewMarkButton)
+            findViewById<Button>(R.id.savedListButton)
 
         val addMarkButton =
-            findViewById<Button>(R.id.addMarkButton)
+            findViewById<Button>(R.id.addButton)
 
         viewMarksButton.setOnClickListener {
             startActivity(
