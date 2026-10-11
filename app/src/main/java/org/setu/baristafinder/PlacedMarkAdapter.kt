@@ -78,7 +78,7 @@ class PlacedMarkAdapter(
         return marks.size
     }
 
-    fun updateMarks(newMarks: List<BaristaModel>) {
+    fun updateMarks(newMarks: List<BaristaModel>) { // updates the currently loaded UI (represented in the adapter by "marks")
         marks = newMarks
         notifyDataSetChanged()
     }

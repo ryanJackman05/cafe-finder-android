@@ -23,7 +23,7 @@ class ListActivity : AppCompatActivity() {
             findViewById(R.id.marksRecyclerView)
 
         adapter = PlacedMarkAdapter( // Adapter handles data -> view/partial mapping
-            marks = AppData.placedMarks.findAll(),
+            marks = AppData.baristaStore.findAll(),
 
             onEdit = { mark ->
                 editMark(mark)
@@ -56,7 +56,7 @@ class ListActivity : AppCompatActivity() {
         if (::adapter.isInitialized) {
 
             adapter.updateMarks(
-                AppData.placedMarks.findAll()
+                AppData.baristaStore.findAll()
             )
         }
     }
@@ -73,10 +73,10 @@ class ListActivity : AppCompatActivity() {
 
     private fun deleteMark(mark: BaristaModel) {
 
-        AppData.placedMarks.delete(mark.id)
+        AppData.baristaStore.delete(mark.id)
 
         adapter.updateMarks(
-            AppData.placedMarks.findAll()
+            AppData.baristaStore.findAll()
         )
     }
 }
