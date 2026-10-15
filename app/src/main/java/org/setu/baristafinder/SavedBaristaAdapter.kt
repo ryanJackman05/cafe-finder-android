@@ -79,6 +79,6 @@ class SavedBaristaAdapter( // Handles active in-memory barista Models
 
     fun updateMarks(newMarks: List<BaristaModel>) { // updates the currently loaded UI (represented in the adapter by "marks")
         baristaModels = newMarks
-        notifyDataSetChanged() // TODO investigate at end if needed
+        notifyDataSetChanged() // TODO OPT investigate at end if needed
     }
 }

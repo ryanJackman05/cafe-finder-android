@@ -28,11 +28,16 @@ class ListActivity : AppCompatActivity() {
             listener = object : BaristaItemListener { // create anonymous/blank object that implements (:) BaristaItemListener
                 // within the object declaration, these functions must be implemented
                 override fun onItemClick(barista: BaristaModel) {
-                    editMark(barista)
+                    editBarista(barista)
                 }
 
                 override fun onItemLongClick(barista: BaristaModel): Boolean {
-                    TODO("Not yet implemented")
+                    ConfirmDialog(this@ListActivity).show( // construct Dialog handler, and run .show
+                        headerText = "Delete Saved Barista",
+                        dialogText = "Delete Barista ${barista.name}",
+                        onConfirm = { deleteBarista(barista) }
+                    )
+                    return true // confirm dialog created, TODO OPT check if this is practical or needed
                 }
             }
         )
@@ -64,7 +69,7 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    private fun editMark(mark: BaristaModel) {
+    private fun editBarista(mark: BaristaModel) {
 
         val intent =
             Intent(this, AddEditActivity::class.java)
@@ -74,7 +79,7 @@ class ListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun deleteMark(mark: BaristaModel) {
+    private fun deleteBarista(mark: BaristaModel) {
 
         AppData.baristaStore.delete(mark.id)
 
