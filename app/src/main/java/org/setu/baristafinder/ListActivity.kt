@@ -34,7 +34,7 @@ class ListActivity : AppCompatActivity() {
                 override fun onItemLongClick(barista: BaristaModel): Boolean {
                     ConfirmDialog(this@ListActivity).show( // construct Dialog handler, and run .show
                         headerText = "Delete Saved Barista",
-                        dialogText = "Delete Barista ${barista.name}",
+                        dialogText = "Delete Barista ${barista.name}?",
                         onConfirm = { deleteBarista(barista) }
                     )
                     return true // confirm dialog created, TODO OPT check if this is practical or needed
