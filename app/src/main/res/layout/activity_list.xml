@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/p_tone_1"
     android:orientation="vertical">
 
     <TextView
@@ -10,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Saved Baristas"
-        android:textColor="@color/p_dark"
         android:textSize="28sp"
         android:textStyle="bold" />
 
@@ -24,6 +22,11 @@
         android:id="@+id/returnButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/p_tone_3"
         android:text="Back" />
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create cafes quickly" />
 </LinearLayout>

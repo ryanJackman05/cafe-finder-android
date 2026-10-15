@@ -16,7 +16,6 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_list)
 
         recyclerView =
@@ -49,11 +48,20 @@ class ListActivity : AppCompatActivity() {
 
         val returnButton =
             findViewById<Button>(R.id.returnButton)
-
         returnButton.setOnClickListener {
 
             startActivity(
                 Intent(this, MainActivity::class.java)
+            )
+        }
+
+        // new button for quickly making data
+        val createButton =
+            findViewById<Button>(R.id.createButton)
+        createButton.setOnClickListener {
+            createMany()
+            adapter.updateMarks(
+                AppData.baristaStore.findAll()
             )
         }
     }
@@ -86,6 +94,19 @@ class ListActivity : AppCompatActivity() {
         adapter.updateMarks(
             AppData.baristaStore.findAll()
         )
+    }
+
+    private fun createMany(){
+        AppData.baristaStore.create(BaristaModel(
+            name="Tina's Cantina",
+            address="A local cafe with a wide drink selection and delicious freshly-made lunch items",
+            x=2.0,y=4.0
+        ))
+        AppData.baristaStore.create(BaristaModel(
+            name="Coffee Joe",
+            address="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
+            x=2.0,y=4.0
+        ))
     }
 }
 
