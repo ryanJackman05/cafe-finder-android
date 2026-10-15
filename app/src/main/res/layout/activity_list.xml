@@ -17,13 +17,29 @@
             android:text="Saved Baristas"
             android:textSize="28sp"
             android:textStyle="bold" />
-        <EditText
-            android:id="@+id/nameSearchInput"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Barista Name"
-            android:inputType="text" />
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:text="Search by\n Name:"
+                android:textAlignment="textEnd" />
+
+            <EditText
+                android:id="@+id/nameSearchInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Barista Name"
+                android:inputType="text" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/marksRecyclerView"
