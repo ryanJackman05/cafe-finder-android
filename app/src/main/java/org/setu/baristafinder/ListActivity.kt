@@ -2,7 +2,10 @@ package org.setu.baristafinder
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +49,28 @@ class ListActivity : AppCompatActivity() {
             LinearLayoutManager(this)
 
         recyclerView.adapter = adapter
+
+        val nameSearch =
+            findViewById<EditText>(R.id.nameSearchInput)
+        nameSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s!!.isEmpty()){
+                    adapter.updateMarks(AppData.baristaStore.findAll()); // normal
+                    return
+                }
+                val bl = ArrayList<BaristaModel>()
+                for (b in AppData.baristaStore.findAll()){
+                    if(b.name.contains(s,ignoreCase=true)){
+                        bl.add(b)
+                    }
+                }
+                adapter.updateMarks(bl)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+        })
 
         val returnButton =
             findViewById<Button>(R.id.returnButton)

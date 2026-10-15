@@ -17,6 +17,13 @@
             android:text="Saved Baristas"
             android:textSize="28sp"
             android:textStyle="bold" />
+        <EditText
+            android:id="@+id/nameSearchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Barista Name"
+            android:inputType="text" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/marksRecyclerView"
