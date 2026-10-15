@@ -4,29 +4,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/marksTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Saved Baristas"
-        android:textSize="28sp"
-        android:textStyle="bold" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/marksRecyclerView"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/marksTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Saved Baristas"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/returnButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/marksRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/createButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create cafes quickly" />
+        <Button
+            android:id="@+id/returnButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/createButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create cafes quickly" />
+    </LinearLayout>
+
+    <include layout="@layout/nav_bar" />
 </LinearLayout>
