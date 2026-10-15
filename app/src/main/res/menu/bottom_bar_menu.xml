@@ -2,15 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/m_viewSaved"
-        android:icon="@android:drawable/checkbox_on_background"
-        android:title="Saved" />
-
+        android:title="Saved"
+        android:icon="@android:drawable/checkbox_on_background"/>
     <item
         android:id="@+id/m_addNew"
         android:title="Add New"
         android:icon="@android:drawable/ic_menu_add" />
     <item
         android:id="@+id/m_viewMap"
-        android:icon="@android:drawable/ic_dialog_map"
-        android:title="Map" />
+        android:title="Map"
+        android:icon="@android:drawable/ic_dialog_map" />
 </menu>
