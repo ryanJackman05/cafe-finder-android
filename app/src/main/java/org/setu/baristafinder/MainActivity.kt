@@ -62,6 +62,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.m_viewMap -> {
+                    startActivity(
+                        Intent(this, MapViewActivity::class.java)
+                    )
                     true
                 }
 

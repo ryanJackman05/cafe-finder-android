@@ -6,6 +6,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import org.setu.baristafinder.models.BaristaModel
 
@@ -63,6 +64,40 @@ class ListActivity : AppCompatActivity() {
             adapter.updateMarks(
                 AppData.baristaStore.findAll()
             )
+        }
+
+        val bottomNavigation =
+            findViewById<BottomNavigationView>(
+                R.id.bottom_navigation
+            )
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+
+            when (item.itemId) {
+
+                R.id.m_viewSaved -> {
+                    startActivity(
+                        Intent(this, MainActivity::class.java)
+                    )
+                    true
+                }
+
+                R.id.m_addNew -> {
+                    startActivity(
+                        Intent(this, AddEditActivity::class.java)
+                    )
+                    true
+                }
+
+                R.id.m_viewMap -> {
+                    startActivity(
+                        Intent(this, MapViewActivity::class.java)
+                    )
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
