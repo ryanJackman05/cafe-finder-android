@@ -26,9 +26,9 @@ class ListActivity : AppCompatActivity() {
             baristaModels = AppData.baristaStore.findAll(),
 
             listener = object : BaristaItemListener { // create anonymous/blank object that implements (:) BaristaItemListener
-                // within the object declaration, these methods must be implemented
+                // within the object declaration, these functions must be implemented
                 override fun onItemClick(barista: BaristaModel) {
-                    TODO("Not yet implemented")
+                    editMark(barista)
                 }
 
                 override fun onItemLongClick(barista: BaristaModel): Boolean {
