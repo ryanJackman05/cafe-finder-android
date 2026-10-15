@@ -9,14 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 
 import org.setu.baristafinder.models.BaristaModel
 
-class PlacedMarkAdapter(
-    private var marks: List<BaristaModel>,
-    private val onEdit: (BaristaModel) -> Unit,
-    private val onDelete: (BaristaModel) -> Unit
-) : RecyclerView.Adapter<PlacedMarkAdapter.MarkViewHolder>() {
+class SavedBaristaAdapter( // Handles active in-memory barista Models
+    private var baristaModels: List<BaristaModel>, // currently loaded/created Baristas
+    private var listener: BaristaItemListener
+) : RecyclerView.Adapter<SavedBaristaAdapter.ItemViewHolder>() {
 
-    class MarkViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class ItemViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) { // declare view class for each individual Item
 
         val titleText: TextView =
             itemView.findViewById(R.id.titleText)
@@ -26,18 +25,12 @@ class PlacedMarkAdapter(
 
         val coordinatesText: TextView =
             itemView.findViewById(R.id.coordinatesText)
-
-        val editButton: Button =
-            itemView.findViewById(R.id.editButton)
-
-        val deleteButton: Button =
-            itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MarkViewHolder {
+    ): ItemViewHolder {
 
         val view = LayoutInflater.from(parent.context)
             .inflate(
@@ -46,40 +39,40 @@ class PlacedMarkAdapter(
                 false
             )
 
-        return MarkViewHolder(view)
+        return ItemViewHolder(view)
     }
 
     override fun onBindViewHolder(
-        holder: MarkViewHolder,
+        holder: ItemViewHolder,
         position: Int
     ) {
 
-        val mark = marks[position]
+        val barista = baristaModels[position]
 
         holder.titleText.text =
-            "${mark.id}: ${mark.name}"
+            "${barista.id}: ${barista.name}"
 
         holder.addressText.text =
-            mark.address
+            barista.address
 
         holder.coordinatesText.text =
-            "X: ${mark.x}, Y: ${mark.y}"
+            "X: ${barista.x}, Y: ${barista.y}"
 
-        holder.editButton.setOnClickListener {
-            onEdit(mark)
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(barista)
         }
 
-        holder.deleteButton.setOnClickListener {
-            onDelete(mark)
+        holder.itemView.setOnLongClickListener {
+            listener.onItemLongClick(barista)
         }
     }
 
     override fun getItemCount(): Int {
-        return marks.size
+        return baristaModels.size
     }
 
     fun updateMarks(newMarks: List<BaristaModel>) { // updates the currently loaded UI (represented in the adapter by "marks")
-        marks = newMarks
-        notifyDataSetChanged()
+        baristaModels = newMarks
+        notifyDataSetChanged() // TODO OPT investigate at end if needed
     }
 }

@@ -12,7 +12,7 @@ import org.setu.baristafinder.models.BaristaModel
 class ListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: PlacedMarkAdapter // TODO add
+    private lateinit var adapter: SavedBaristaAdapter // TODO add
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,15 +22,23 @@ class ListActivity : AppCompatActivity() {
         recyclerView =
             findViewById(R.id.marksRecyclerView)
 
-        adapter = PlacedMarkAdapter( // Adapter handles data -> view/partial mapping
-            marks = AppData.baristaStore.findAll(),
+        adapter = SavedBaristaAdapter( // Adapter handles data -> view/partial mapping, AppData handles storage
+            baristaModels = AppData.baristaStore.findAll(),
 
-            onEdit = { mark ->
-                editMark(mark)
-            },
+            listener = object : BaristaItemListener { // create anonymous/blank object that implements (:) BaristaItemListener
+                // within the object declaration, these functions must be implemented
+                override fun onItemClick(barista: BaristaModel) {
+                    editBarista(barista)
+                }
 
-            onDelete = { mark ->
-                deleteMark(mark)
+                override fun onItemLongClick(barista: BaristaModel): Boolean {
+                    ConfirmDialog(this@ListActivity).show( // construct Dialog handler, and run .show
+                        headerText = "Delete Saved Barista",
+                        dialogText = "Delete Barista ${barista.name}?",
+                        onConfirm = { deleteBarista(barista) }
+                    )
+                    return true // confirm dialog created, TODO OPT check if this is practical or needed
+                }
             }
         )
 
@@ -61,7 +69,7 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    private fun editMark(mark: BaristaModel) {
+    private fun editBarista(mark: BaristaModel) {
 
         val intent =
             Intent(this, AddEditActivity::class.java)
@@ -71,7 +79,7 @@ class ListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun deleteMark(mark: BaristaModel) {
+    private fun deleteBarista(mark: BaristaModel) {
 
         AppData.baristaStore.delete(mark.id)
 
@@ -79,4 +87,12 @@ class ListActivity : AppCompatActivity() {
             AppData.baristaStore.findAll()
         )
     }
+}
+
+interface BaristaItemListener { // interface of methods for activity to derive from for each item
+
+    fun onItemClick(barista: BaristaModel)
+
+    fun onItemLongClick(barista: BaristaModel): Boolean
+
 }
