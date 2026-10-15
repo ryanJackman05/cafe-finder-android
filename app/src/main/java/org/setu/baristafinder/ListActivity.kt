@@ -2,10 +2,14 @@ package org.setu.baristafinder
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import org.setu.baristafinder.models.BaristaModel
 
@@ -46,6 +50,28 @@ class ListActivity : AppCompatActivity() {
 
         recyclerView.adapter = adapter
 
+        val nameSearch =
+            findViewById<EditText>(R.id.nameSearchInput)
+        nameSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s!!.isEmpty()){
+                    adapter.updateMarks(AppData.baristaStore.findAll()) // normal
+                    return
+                }
+                val bl = ArrayList<BaristaModel>()
+                for (b in AppData.baristaStore.findAll()){
+                    if(b.name.contains(s,ignoreCase=true)){
+                        bl.add(b)
+                    }
+                }
+                adapter.updateMarks(bl)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+        })
+
         val returnButton =
             findViewById<Button>(R.id.returnButton)
         returnButton.setOnClickListener {
@@ -63,6 +89,40 @@ class ListActivity : AppCompatActivity() {
             adapter.updateMarks(
                 AppData.baristaStore.findAll()
             )
+        }
+
+        val bottomNavigation =
+            findViewById<BottomNavigationView>(
+                R.id.bottom_navigation
+            )
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+
+            when (item.itemId) {
+
+                R.id.m_viewSaved -> {
+                    startActivity(
+                        Intent(this, MainActivity::class.java)
+                    )
+                    true
+                }
+
+                R.id.m_addNew -> {
+                    startActivity(
+                        Intent(this, AddEditActivity::class.java)
+                    )
+                    true
+                }
+
+                R.id.m_viewMap -> {
+                    startActivity(
+                        Intent(this, MapViewActivity::class.java)
+                    )
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
@@ -99,13 +159,21 @@ class ListActivity : AppCompatActivity() {
     private fun createMany(){
         AppData.baristaStore.create(BaristaModel(
             name="Tina's Cantina",
-            address="A local cafe with a wide drink selection and delicious freshly-made lunch items",
-            x=2.0,y=4.0
+            address="52 Foylewood Business Park,\nBallybrack, Co. Waterlow\nWQS 98LP",
+            //description="A local cafe with a wide drink selection and delicious freshly-made lunch items",
+            x=20.2,y=4.0
         ))
         AppData.baristaStore.create(BaristaModel(
             name="Coffee Joe",
-            address="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
-            x=2.0,y=4.0
+            address="Upper John Street,\nCillcomer, Co. Waterlow\nWQS 5GH2",
+            //description="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
+            x=4.6,y=5.7
+        ))
+        AppData.baristaStore.create(BaristaModel(
+            name="Beanright",
+            address="Ponberry Shopping Center,\nWaterlow, Co. Waterlow",
+            //description="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
+            x=1.3,y=0.9
         ))
     }
 }

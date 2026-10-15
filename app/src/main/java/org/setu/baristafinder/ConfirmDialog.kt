@@ -25,7 +25,7 @@ class ConfirmDialog (private val context: Context) {
         val confirmButton = dialog.findViewById<Button>(R.id.dialogConfirmButton)
         confirmButton.text = confirmText
         val cancelButton = dialog.findViewById<Button>(R.id.dialogCancelButton)
-        cancelButton.text = cancelText;
+        cancelButton.text = cancelText
 
         confirmButton.setOnClickListener {
             dialog.dismiss()

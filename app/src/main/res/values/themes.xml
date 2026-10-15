@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.BaristaFinder" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="android:textColorPrimary">@color/p_highlight</item> <!-- EditText, -->
-        <item name="android:textColorSecondary">@color/testG</item> <!-- line of EditText-->
+        <item name="android:textColorPrimary">@color/p_dark</item> <!-- EditText, -->
+        <item name="android:textColorSecondary">@color/p_highlight</item> <!-- line of EditText-->
         <item name="android:textColorTertiary">@color/p_dark</item> <!-- TextView, -->
         <item name="colorOnPrimary">@color/p_dark</item> <!-- Button text, -->
         <item name="colorPrimary">@color/p_tone_1</item>

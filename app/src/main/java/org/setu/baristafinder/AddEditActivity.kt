@@ -1,11 +1,13 @@
 package org.setu.baristafinder
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.setu.baristafinder.models.BaristaModel
 
 class AddEditActivity : AppCompatActivity() {
@@ -58,6 +60,40 @@ class AddEditActivity : AppCompatActivity() {
 
         cancelButton.setOnClickListener {
             finish()
+        }
+
+        val bottomNavigation =
+            findViewById<BottomNavigationView>(
+                R.id.bottom_navigation
+            )
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+
+            when (item.itemId) {
+
+                R.id.m_viewSaved -> {
+                    startActivity(
+                        Intent(this, ListActivity::class.java)
+                    )
+                    true
+                }
+
+                R.id.m_addNew -> {
+                    startActivity(
+                        Intent(this, MainActivity::class.java)
+                    )
+                    true
+                }
+
+                R.id.m_viewMap -> {
+                    startActivity(
+                        Intent(this, MapViewActivity::class.java)
+                    )
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
