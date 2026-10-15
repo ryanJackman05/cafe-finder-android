@@ -12,7 +12,7 @@ import org.setu.baristafinder.models.BaristaModel
 class ListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: PlacedMarkAdapter // TODO add
+    private lateinit var adapter: SavedBaristaAdapter // TODO add
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,15 +22,18 @@ class ListActivity : AppCompatActivity() {
         recyclerView =
             findViewById(R.id.marksRecyclerView)
 
-        adapter = PlacedMarkAdapter( // Adapter handles data -> view/partial mapping
-            marks = AppData.baristaStore.findAll(),
+        adapter = SavedBaristaAdapter( // Adapter handles data -> view/partial mapping, AppData handles storage
+            baristaModels = AppData.baristaStore.findAll(),
 
-            onEdit = { mark ->
-                editMark(mark)
-            },
+            listener = object : BaristaItemListener { // create anonymous/blank object that implements (:) BaristaItemListener
+                // within the object declaration, these methods must be implemented
+                override fun onItemClick(barista: BaristaModel) {
+                    TODO("Not yet implemented")
+                }
 
-            onDelete = { mark ->
-                deleteMark(mark)
+                override fun onItemLongClick(barista: BaristaModel): Boolean {
+                    TODO("Not yet implemented")
+                }
             }
         )
 
@@ -79,4 +82,12 @@ class ListActivity : AppCompatActivity() {
             AppData.baristaStore.findAll()
         )
     }
+}
+
+interface BaristaItemListener { // interface of methods for activity to derive from for each item
+
+    fun onItemClick(barista: BaristaModel)
+
+    fun onItemLongClick(barista: BaristaModel): Boolean
+
 }
