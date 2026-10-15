@@ -17,6 +17,7 @@
         android:id="@+id/addressText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="5"
         android:text="description"
         android:textSize="16sp" />
 
