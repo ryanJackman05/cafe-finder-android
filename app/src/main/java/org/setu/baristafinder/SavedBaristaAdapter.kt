@@ -25,12 +25,6 @@ class SavedBaristaAdapter( // Handles active in-memory barista Models
 
         val coordinatesText: TextView =
             itemView.findViewById(R.id.coordinatesText)
-
-        val editButton: Button =
-            itemView.findViewById(R.id.editButton)
-
-        val deleteButton: Button =
-            itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(
@@ -64,11 +58,11 @@ class SavedBaristaAdapter( // Handles active in-memory barista Models
         holder.coordinatesText.text =
             "X: ${barista.x}, Y: ${barista.y}"
 
-        holder.editButton.setOnClickListener {
+        holder.itemView.setOnClickListener {
             listener.onItemClick(barista)
         }
 
-        holder.deleteButton.setOnClickListener {
+        holder.itemView.setOnLongClickListener {
             listener.onItemLongClick(barista)
         }
     }
