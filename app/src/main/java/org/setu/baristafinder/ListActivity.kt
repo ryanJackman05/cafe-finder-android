@@ -55,7 +55,7 @@ class ListActivity : AppCompatActivity() {
         nameSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if(s!!.isEmpty()){
-                    adapter.updateMarks(AppData.baristaStore.findAll()); // normal
+                    adapter.updateMarks(AppData.baristaStore.findAll()) // normal
                     return
                 }
                 val bl = ArrayList<BaristaModel>()
