@@ -159,13 +159,21 @@ class ListActivity : AppCompatActivity() {
     private fun createMany(){
         AppData.baristaStore.create(BaristaModel(
             name="Tina's Cantina",
-            address="A local cafe with a wide drink selection and delicious freshly-made lunch items",
-            x=2.0,y=4.0
+            address="52 Foylewood Business Park,\nBallybrack, Co. Waterlow\nWQS 98LP",
+            //description="A local cafe with a wide drink selection and delicious freshly-made lunch items",
+            x=20.2,y=4.0
         ))
         AppData.baristaStore.create(BaristaModel(
             name="Coffee Joe",
-            address="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
-            x=2.0,y=4.0
+            address="Upper John Street,\nCillcomer, Co. Waterlow\nWQS 5GH2",
+            //description="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
+            x=4.6,y=5.7
+        ))
+        AppData.baristaStore.create(BaristaModel(
+            name="Beanright",
+            address="Ponberry Shopping Center,\nWaterlow, Co. Waterlow",
+            //description="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
+            x=1.3,y=0.9
         ))
     }
 }
