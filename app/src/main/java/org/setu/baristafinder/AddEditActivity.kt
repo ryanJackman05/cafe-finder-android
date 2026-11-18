@@ -12,15 +12,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.setu.baristafinder.models.BaristaModel
+import org.setu.placemark.MapPickerActivity
 
 class AddEditActivity : AppCompatActivity() {
 
+    // 1-to-1 fields with add_edit
     private lateinit var nameInput: EditText
     private lateinit var addressInput: EditText
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
     private lateinit var imagePreview: ImageView
     private var selectedImageUri: Uri? = null;
+
+    private var selectedLatitude: Double? = null;
+    private var selectedLongitude: Double? = null;
 
     private var editingId: Long? = null
 
@@ -68,6 +73,30 @@ class AddEditActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.imageButton).setOnClickListener {
             imagePicker.launch(arrayOf("image/*"))
+        }
+
+        val mapPicker =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data ?: return@registerForActivityResult
+                    selectedLatitude = data.getDoubleExtra("latitude", 0.0)
+                    selectedLongitude = data.getDoubleExtra("longitude", 0.0)
+
+                    selectedLatitude?.let {
+                        xInput.setText(it.toString())
+                    }
+
+                    selectedLongitude?.let {
+                        yInput.setText(it.toString())
+                    }
+                }
+            }
+
+        findViewById<Button>(R.id.buttonLoc).setOnClickListener {
+            val intent = Intent(this, MapPickerActivity::class.java)
+            mapPicker.launch(intent)
         }
 
         val bottomNavigation =
