@@ -47,26 +47,6 @@ class AddEditActivity : AppCompatActivity() {
         val cancelButton =
             findViewById<Button>(R.id.cancelButton)
 
-        editingId =
-            intent.getLongExtra("id", -1L)
-                .takeIf { it != -1L }
-
-        if (editingId != null) {
-
-            findViewById<TextView>(R.id.formTitle)
-                .text = "Edit Mark"
-
-            loadExistingMark(editingId!!)
-        }
-
-        saveButton.setOnClickListener {
-            saveMark()
-        }
-
-        cancelButton.setOnClickListener {
-            finish()
-        }
-
         imagePreview = findViewById(R.id.imageView)
         val imagePicker =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -122,6 +102,27 @@ class AddEditActivity : AppCompatActivity() {
 
                 else -> false
             }
+        }
+
+        // editing only works if loadExistingMark has all the fields, so it's called after the view mapping
+        editingId =
+            intent.getLongExtra("id", -1L)
+                .takeIf { it != -1L }
+
+        if (editingId != null) {
+
+            findViewById<TextView>(R.id.formTitle)
+                .text = "Edit Mark"
+
+            loadExistingMark(editingId!!)
+        }
+
+        saveButton.setOnClickListener {
+            saveMark()
+        }
+
+        cancelButton.setOnClickListener {
+            finish()
         }
     }
 
@@ -185,22 +186,29 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         if (editingId == null) {
+            try{ // to catch failed validate() calls from the barista store
+                val mark = BaristaModel(
+                    name = name,
+                    address = address,
+                    x = x,
+                    y = y,
+                    imageUri = selectedImageUri?.toString()
+                )
 
-            val mark = BaristaModel(
-                name = name,
-                address = address,
-                x = x,
-                y = y,
-                imageUri = selectedImageUri?.toString()
-            )
+                AppData.baristaStore.create(mark)
 
-            AppData.baristaStore.create(mark)
-
-            Toast.makeText(
-                this,
-                "Mark created",
-                Toast.LENGTH_SHORT
-            ).show()
+                Toast.makeText(
+                    this,
+                    "Mark created",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (e: IllegalArgumentException) {
+                android.widget.Toast.makeText(
+                    this,
+                    e.message ?: "Please check the entered values.",
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+            }
 
         } else {
 

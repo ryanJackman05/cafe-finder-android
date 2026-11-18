@@ -28,4 +28,11 @@
         android:text="coord"
         android:textSize="14sp" />
 
+    <ImageView
+        android:id="@+id/markImage"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:maxHeight="250dp"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
 </LinearLayout>

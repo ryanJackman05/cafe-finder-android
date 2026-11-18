@@ -1,9 +1,11 @@
 package org.setu.baristafinder
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -25,6 +27,9 @@ class SavedBaristaAdapter( // Handles active in-memory barista Models
 
         val coordinatesText: TextView =
             itemView.findViewById(R.id.coordinatesText)
+
+        val markImage: ImageView =
+            itemView.findViewById(R.id.markImage)
     }
 
     override fun onCreateViewHolder(
@@ -57,6 +62,16 @@ class SavedBaristaAdapter( // Handles active in-memory barista Models
 
         holder.coordinatesText.text =
             "X: ${barista.x}, Y: ${barista.y}"
+
+        val imageUri = barista.imageUri?.let { Uri.parse(it) }
+
+        if (imageUri != null) {
+            holder.markImage.setImageURI(imageUri)
+        } else {
+            holder.markImage.setImageResource(
+                android.R.drawable.ic_menu_gallery
+            )
+        }
 
         holder.itemView.setOnClickListener {
             listener.onItemClick(barista)
