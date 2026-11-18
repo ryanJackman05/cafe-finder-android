@@ -1,11 +1,14 @@
 package org.setu.baristafinder
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.setu.baristafinder.models.BaristaModel
@@ -16,6 +19,8 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var addressInput: EditText
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
+    private lateinit var imagePreview: ImageView
+    private var selectedImageUri: Uri? = null;
 
     private var editingId: Long? = null
 
@@ -60,6 +65,29 @@ class AddEditActivity : AppCompatActivity() {
 
         cancelButton.setOnClickListener {
             finish()
+        }
+
+        imagePreview = findViewById(R.id.imageView)
+        val imagePicker =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+                if (uri != null) {
+                    // Keep access to the document URI for later use, when supported.
+                    try {
+                        contentResolver.takePersistableUriPermission(
+                            uri,
+                            android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+                    } catch (_: SecurityException) {
+                        // Some providers may not grant persistable access.
+                    }
+
+                    selectedImageUri = uri
+                    imagePreview.setImageURI(uri)
+                }
+            }
+
+        findViewById<Button>(R.id.imageButton).setOnClickListener {
+            imagePicker.launch(arrayOf("image/*"))
         }
 
         val bottomNavigation =
