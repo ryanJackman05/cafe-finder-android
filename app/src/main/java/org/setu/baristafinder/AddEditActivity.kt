@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.osmdroid.util.GeoPoint
 import org.setu.baristafinder.models.BaristaModel
-import org.setu.placemark.MapPickerActivity
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -96,6 +96,11 @@ class AddEditActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.buttonLoc).setOnClickListener {
             val intent = Intent(this, MapPickerActivity::class.java)
+            val b: BaristaModel? = AppData.baristaStore.findOne(editingId?:-1);
+            if(b != null){
+                intent.putExtra("latitude", b.x)
+                intent.putExtra("longitude", b.y)
+            }
             mapPicker.launch(intent)
         }
 
@@ -135,7 +140,7 @@ class AddEditActivity : AppCompatActivity() {
 
         // editing only works if loadExistingMark has all the fields, so it's called after the view mapping
         editingId =
-            intent.getLongExtra("id", -1L)
+            intent.getLongExtra("id", -1L) // get the added id variable (look at [ListActivity.editBarista])
                 .takeIf { it != -1L }
 
         if (editingId != null) {

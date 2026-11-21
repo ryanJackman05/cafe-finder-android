@@ -161,19 +161,19 @@ class ListActivity : AppCompatActivity() {
             name="Tina's Cantina",
             address="52 Foylewood Business Park,\nBallybrack, Co. Waterlow\nWQS 98LP",
             //description="A local cafe with a wide drink selection and delicious freshly-made lunch items",
-            x=20.2,y=4.0
+            x=52.654230617782346,y=-7.248479418225116
         ))
         AppData.baristaStore.create(BaristaModel(
             name="Coffee Joe",
             address="Upper John Street,\nCillcomer, Co. Waterlow\nWQS 5GH2",
             //description="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
-            x=4.6,y=5.7
+            x=52.261831535997935,y=-7.115615965321
         ))
         AppData.baristaStore.create(BaristaModel(
             name="Beanright",
             address="Ponberry Shopping Center,\nWaterlow, Co. Waterlow",
             //description="Branch of the Coffee Joe company. Includes the famous Joe's Blend bean option, and a drive-thru",
-            x=1.3,y=0.9
+            x=52.260343265920,y=-7.1096793725589
         ))
     }
 }
