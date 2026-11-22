@@ -70,4 +70,4 @@
 ```
 
 - Adding bad coordinates will close the create menu before showing the message. It should stay open, or remember the edit fields' values.
-- Map screen crashes app
+- Map screen crashes app / needs adding
