@@ -1,10 +1,37 @@
 package org.setu.baristafinder.models
 
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 
-class BaristaStore { // TODO currently mem. convert to JSON storage after lab
+class BaristaStore (private val file: File) { // TODO currently mem. convert to JSON storage after lab
     private val baristas = ArrayList<BaristaModel>()
     private val lastId = AtomicLong(0L)
+    private val gson = GsonBuilder()
+        .setPrettyPrinting()
+        .create()
+
+    init { // on class create
+        load()
+    }
+    private fun load() {
+        if (!file.exists()) return
+
+        val type = object : TypeToken<ArrayList<BaristaModel>>() {}.type
+
+        val loaded: ArrayList<BaristaModel> =
+            gson.fromJson(file.readText(), type) ?: arrayListOf()
+
+        baristas.clear()
+        baristas.addAll(loaded)
+
+        lastId.set(baristas.maxOfOrNull { it.id } ?: 0L)
+    }
+    private fun save() {
+        file.parentFile?.mkdirs()
+        file.writeText(gson.toJson(baristas))
+    }
 
     fun findAll(): List<BaristaModel> {
         return baristas
