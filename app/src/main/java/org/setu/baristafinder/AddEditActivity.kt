@@ -1,21 +1,31 @@
 package org.setu.baristafinder
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.osmdroid.util.GeoPoint
 import org.setu.baristafinder.models.BaristaModel
 
 class AddEditActivity : AppCompatActivity() {
 
+    // 1-to-1 fields with add_edit
     private lateinit var nameInput: EditText
     private lateinit var addressInput: EditText
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
+    private lateinit var imagePreview: ImageView
+    private var selectedImageUri: Uri? = null;
+
+    private var selectedLatitude: Double? = null;
+    private var selectedLongitude: Double? = null;
 
     private var editingId: Long? = null
 
@@ -42,24 +52,56 @@ class AddEditActivity : AppCompatActivity() {
         val cancelButton =
             findViewById<Button>(R.id.cancelButton)
 
-        editingId =
-            intent.getLongExtra("id", -1L)
-                .takeIf { it != -1L }
+        imagePreview = findViewById(R.id.imageView)
+        val imagePicker =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+                if (uri != null) {
+                    // Keep access to the document URI for later use, when supported.
+                    try {
+                        contentResolver.takePersistableUriPermission(
+                            uri,
+                            android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+                    } catch (_: SecurityException) {
+                        // Some providers may not grant persistable access.
+                    }
 
-        if (editingId != null) {
+                    selectedImageUri = uri
+                    imagePreview.setImageURI(uri)
+                }
+            }
 
-            findViewById<TextView>(R.id.formTitle)
-                .text = "Edit Mark"
-
-            loadExistingMark(editingId!!)
+        findViewById<Button>(R.id.imageButton).setOnClickListener {
+            imagePicker.launch(arrayOf("image/*"))
         }
 
-        saveButton.setOnClickListener {
-            saveMark()
-        }
+        val mapPicker =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data ?: return@registerForActivityResult
+                    selectedLatitude = data.getDoubleExtra("latitude", 0.0)
+                    selectedLongitude = data.getDoubleExtra("longitude", 0.0)
 
-        cancelButton.setOnClickListener {
-            finish()
+                    selectedLatitude?.let {
+                        xInput.setText(it.toString())
+                    }
+
+                    selectedLongitude?.let {
+                        yInput.setText(it.toString())
+                    }
+                }
+            }
+
+        findViewById<Button>(R.id.buttonLoc).setOnClickListener {
+            val intent = Intent(this, MapPickerActivity::class.java)
+            val b: BaristaModel? = AppData.baristaStore.findOne(editingId?:-1);
+            if(b != null){
+                intent.putExtra("latitude", b.x)
+                intent.putExtra("longitude", b.y)
+            }
+            mapPicker.launch(intent)
         }
 
         val bottomNavigation =
@@ -95,6 +137,27 @@ class AddEditActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        // editing only works if loadExistingMark has all the fields, so it's called after the view mapping
+        editingId =
+            intent.getLongExtra("id", -1L) // get the added id variable (look at [ListActivity.editBarista])
+                .takeIf { it != -1L }
+
+        if (editingId != null) {
+
+            findViewById<TextView>(R.id.formTitle)
+                .text = "Edit Mark"
+
+            loadExistingMark(editingId!!)
+        }
+
+        saveButton.setOnClickListener {
+            saveMark()
+        }
+
+        cancelButton.setOnClickListener {
+            finish()
+        }
     }
 
     private fun loadExistingMark(id: Long) {
@@ -118,6 +181,13 @@ class AddEditActivity : AppCompatActivity() {
         addressInput.setText(mark.address)
         xInput.setText(mark.x.toString())
         yInput.setText(mark.y.toString())
+        selectedImageUri = mark.imageUri?.let { Uri.parse(it) }
+
+        if (selectedImageUri != null) {
+            imagePreview.setImageURI(selectedImageUri)
+        } else {
+            imagePreview.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
     }
 
     private fun saveMark() {
@@ -150,21 +220,29 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         if (editingId == null) {
+            try{ // to catch failed validate() calls from the barista store
+                val mark = BaristaModel(
+                    name = name,
+                    address = address,
+                    x = x,
+                    y = y,
+                    imageUri = selectedImageUri?.toString()
+                )
 
-            val mark = BaristaModel(
-                name = name,
-                address = address,
-                x = x,
-                y = y
-            )
+                AppData.baristaStore.create(mark)
 
-            AppData.baristaStore.create(mark)
-
-            Toast.makeText(
-                this,
-                "Mark created",
-                Toast.LENGTH_SHORT
-            ).show()
+                Toast.makeText(
+                    this,
+                    "Mark created",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (e: IllegalArgumentException) {
+                android.widget.Toast.makeText(
+                    this,
+                    e.message ?: "Please check the entered values.",
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+            }
 
         } else {
 
@@ -173,7 +251,8 @@ class AddEditActivity : AppCompatActivity() {
                 name = name,
                 address = address,
                 x = x,
-                y = y
+                y = y,
+                imageUri = selectedImageUri?.toString()
             )
 
             AppData.baristaStore.update(mark)

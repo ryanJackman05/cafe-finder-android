@@ -14,17 +14,20 @@ class BaristaStore { // TODO currently mem. convert to JSON storage after lab
     }
 
     fun create(barista: BaristaModel) {
+        barista.validate()
         barista.id = lastId.incrementAndGet()
         baristas.add(barista)
     }
 
     fun update(barista: BaristaModel): Boolean {
+        barista.validate()
         val foundBarista = findOne(barista.id)
         return if (foundBarista != null) {
             foundBarista.name = barista.name
             foundBarista.address = barista.address
             foundBarista.x = barista.x
             foundBarista.y = barista.y
+            foundBarista.imageUri = barista.imageUri
             true
         } else {
             false
