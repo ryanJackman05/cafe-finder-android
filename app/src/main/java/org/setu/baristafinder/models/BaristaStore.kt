@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 
-class BaristaStore (private val file: File) { // TODO currently mem. convert to JSON storage after lab
+class BaristaStore (private val file: File) {
     private val baristas = ArrayList<BaristaModel>()
     private val lastId = AtomicLong(0L)
     private val gson = GsonBuilder()
@@ -44,6 +44,7 @@ class BaristaStore (private val file: File) { // TODO currently mem. convert to 
         barista.validate()
         barista.id = lastId.incrementAndGet()
         baristas.add(barista)
+        save()
     }
 
     fun update(barista: BaristaModel): Boolean {
@@ -55,6 +56,7 @@ class BaristaStore (private val file: File) { // TODO currently mem. convert to 
             foundBarista.x = barista.x
             foundBarista.y = barista.y
             foundBarista.imageUri = barista.imageUri
+            save()
             true
         } else {
             false
@@ -65,6 +67,7 @@ class BaristaStore (private val file: File) { // TODO currently mem. convert to 
         val foundBarista = findOne(id)
         return if (foundBarista != null) {
             baristas.remove(foundBarista)
+            save()
             true
         } else {
             false
