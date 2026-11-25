@@ -71,5 +71,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        AppData.initialize(this)
     }
 }
